@@ -70,3 +70,25 @@
   .center-paragraph {
     text-align: center;
   }
+
+  .full-height {
+    height: 100%;
+  }
+
+  .card {
+    display: flex;
+    background-color: #d8fde3;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .name-with-price {
+    display: flex;
+    width: 90%;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
