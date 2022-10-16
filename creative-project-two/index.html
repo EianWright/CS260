@@ -13,28 +13,51 @@
 
   <div class="container main-view">
     <div class="content-wrap">
-      <h1 id="labTitle">Lab 2</h1>
+      <h1 id="labTitle">Creative Project #2</h1>
 
-    <footer class="bottom-footer">
-      <p><a
-          href="https://github.com/BYU-CS-260/lab2-javascript-EianWright">https://github.com/BYU-CS-260/lab2-javascript-EianWright</a>
-      </p>
-    </footer>
-  </div>
+      <p>This app uses the <a href="https://taylorswiftapi.herokuapp.com/">Taylor Swift API</a> to
+        get a random lyric from one of her songs. It then uses the <a
+          href="https://developer.spotify.com/documentation/web-api/">
+          Spotify Web Api</a> to get the album art associated with the random song.</p>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"
-    integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-    crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-    crossorigin="anonymous"></script>
-  </script>
+      <form class="pure-form>" <fieldset>
+        <legend>Enter the name of a Taylor Swift album or song or leave blank for a random lyric from
+          any of her songs.
+        </legend>
+        <input placeholder="name" id="name">
+        <br>
+        <p></p>
+        <select id="selector">
+          <option value="album">Album</option>
+          <option value="song">Song</option>
+        </select>
+        <p></p>
+        <button id="goButton" class="pure-button pure-button-primary">Go!</button>
+        </fieldset>
+      </form>
 
+      <div id="results"></div>
+
+      <footer class="bottom-footer">
+        <p><a target="_blank" href="https://github.com/EianWright/CS260/tree/main/creative-project-two">Creative Project
+            Two Code</a>
+        </p>
+      </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"
+      integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+      integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+      crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+      integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+      crossorigin="anonymous"></script>
+
+    <script src="bundle.js"></script>
 </body>
 
 </html>
