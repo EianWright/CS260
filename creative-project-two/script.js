@@ -1,7 +1,6 @@
 var request = require('request'); // "Request" library
 
 var config = require('./config');
-console.log(config);
 
 var client_id = config.client_id;
 var client_secret = config.client_secret;
