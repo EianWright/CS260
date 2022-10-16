@@ -1,7 +1,6 @@
 var request = require('request'); // "Request" library
 
-var client_id = '4514ec3d79dc4c609023c05f87cfe775';
-var client_secret = 'efc8af1447064d07b8f3074ecaadb0a8';
+
 
 var token;
 
@@ -66,14 +65,13 @@ document.getElementById("goButton").addEventListener("click", function (event) {
         let track = json.items[0];
         let album = track.album;
         console.log(track);
-        let albumPicture = album.images[0];
-        let toReplaceImage = document.getElementById('results');
+        let toReplace = document.getElementById('results');
         let result = "";
-        let imageHTML = '<img src="' + albumPicture.url + '" height="' + albumPicture.height + '" width="' + albumPicture.width + '">';
-        result += imageHTML;
+        let albumPicture = album.images[0];
+        result += '<img class="album-cover-art" src="' + albumPicture.url + '" height="' + albumPicture.height + '" width="' + albumPicture.width + '">';
         result += '<br>'
         result += '<p>Album: ' + albumName + ' Song: ' + songName + ' Lyric: ' + randomLyric + '</p>';
-        toReplaceImage.innerHTML = result;
+        toReplace.innerHTML = result;
       });
     });
 });
