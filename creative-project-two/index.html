@@ -27,12 +27,19 @@
         <input placeholder="name" id="name">
         <br>
         <p></p>
-        <select id="selector">
-          <option value="album">Album</option>
-          <option value="song">Song</option>
-        </select>
-        <p></p>
-        <button id="goButton" class="pure-button pure-button-primary">Go!</button>
+        <div class="container">
+          <div class="row selector-with-button">
+            <div class="col">
+              <select id="selector">
+                <option value="album">Album</option>
+                <option value="song">Song</option>
+              </select>
+            </div>
+            <div class="col">
+              <button id="goButton" class="pure-button pure-button-primary">Go!</button>
+            </div>
+          </div>
+        </div>
         </fieldset>
       </form>
 
