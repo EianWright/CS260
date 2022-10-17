@@ -36,3 +36,22 @@ body {
     padding-bottom: 10px;
     text-align: center;
 }
+
+.album-cover-art {
+    width: 50%;
+    height: auto;
+}
+
+.selector-with-button {
+    width: max-content;
+}
+
+.selector-column {
+    display: flex;
+    padding-left: 0px;
+}
+
+#goButton {
+    padding: 3px 5px 3px 5px;
+    border-width: 1px;
+}
