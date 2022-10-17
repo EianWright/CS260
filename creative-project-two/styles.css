@@ -38,7 +38,7 @@ body {
 }
 
 .album-cover-art {
-    width: 50%;
+    width: 90%;
     height: auto;
 }
 
@@ -54,4 +54,20 @@ body {
 #goButton {
     padding: 3px 5px 3px 5px;
     border-width: 1px;
+}
+
+.name-container > p:first-child {
+    margin-bottom: 0px;
+}
+
+.name-container > p:not(:first-child) {
+    font-size: 12px;
+}
+
+#lyric {
+    font-size: 40px;
+}
+
+#photoColumn {
+    height: min-content;
 }

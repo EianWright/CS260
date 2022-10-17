@@ -48,8 +48,11 @@ document.getElementById("goButton").addEventListener("click", function (event) {
       console.log(json);
 
       var albumName = json.album;
+      document.getElementById('albumName').innerHTML = "Album Name: " + albumName;
       var songName = json.song;
+      document.getElementById('songName').innerHTML = "Song Name: " + songName;
       var randomLyric = json.quote;
+      document.getElementById('lyric').innerHTML = '<em>"' + randomLyric + '"</em>';
 
       let formattedAlbumName = json.album.trim().replaceAll(' ', '%20');
       let formattedTrackName = json.song.trim().replaceAll(' ', '%20');
@@ -68,13 +71,18 @@ document.getElementById("goButton").addEventListener("click", function (event) {
         let track = json.items[0];
         let album = track.album;
         console.log(track);
-        let toReplace = document.getElementById('results');
-        let result = "";
         let albumPicture = album.images[0];
-        result += '<img class="album-cover-art" src="' + albumPicture.url + '" height="' + albumPicture.height + '" width="' + albumPicture.width + '">';
-        result += '<br>'
-        result += '<p>Album: ' + albumName + ' Song: ' + songName + ' Lyric: ' + randomLyric + '</p>';
-        toReplace.innerHTML = result;
+        let imageHTML = '<img class="album-cover-art" src="' + albumPicture.url + '" height="' + albumPicture.height + '" width="' + albumPicture.width + '">';
+        document.getElementById('photoColumn').innerHTML = imageHTML;
+        let songLink = track.external_urls.spotify;
+        let songLinkHTML = '<a target="_blank" href="' + songLink + '">Spotify</a>';
+        let songLinkParagraphHTML = 'Listen to "' + songName + '" on ' + songLinkHTML + '.';
+        document.getElementById('songLink').innerHTML = songLinkParagraphHTML;
+
+        let albumLink = album.external_urls.spotify;
+        let albumLinkHTML = '<a target="_blank" href="' + albumLink + '">Spotify</a>';
+        let albumLinkParagraphHTML = 'Listen to "' + albumName + '" on ' + albumLinkHTML + '.';
+        document.getElementById('albumLink').innerHTML = albumLinkParagraphHTML;
       });
     });
 });
