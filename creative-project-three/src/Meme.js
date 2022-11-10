@@ -4,7 +4,7 @@ function Meme(props) {
     
     return (
         <div className="meme-container">
-            <img src={props.meme.url} className="meme-image" />
+            <img alt="Random meme" src={props.meme.url} className="meme-image" />
         </div>
     );
 }
