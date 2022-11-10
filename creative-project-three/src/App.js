@@ -48,6 +48,9 @@ function App() {
         }}>Get New Meme</button>
       </p>
       <Meme key={meme.id} meme={meme} setMeme={setMeme} />
+      <footer className='repo-footer'>
+        <a href='https://github.com/EianWright/CS260/tree/main/creative-project-three'>Creative Project Three GitHub Repo</a>
+      </footer>
     </div>
   );
 }
