@@ -15,6 +15,7 @@ let savedMemes = [];
 
 app.post('/api/memes/user/add/:username', (req, res) => {
     let username = req.params.username;
+    console.log(username);
     let requestedUserMemes = savedMemes.find(memes => memes.username == username);
     if (requestedUserMemes === undefined) {
         requestedUserMemes = {
@@ -23,6 +24,7 @@ app.post('/api/memes/user/add/:username', (req, res) => {
         };
         savedMemes.push(requestedUserMemes);
     }
+    console.log(requestedUserMemes);
     res.send(requestedUserMemes);
 });
 

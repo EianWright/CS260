@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { BrowserRouter, useOutletContext, Routes, Route, Navigate } from "react-router-dom";
+import axios from 'axios';
+import { useOutletContext, Navigate } from "react-router-dom";
 
 const Home = (props) => {
   const [setGoPastHome, goPastHome, setCurrUserName, currUserName, savedNavBar] = useOutletContext();
@@ -12,13 +13,24 @@ const Home = (props) => {
     );
   }
 
+  const addUser = async (username) => {
+    try {
+      let url = '/api/memes/user/add/' + username;
+      console.log(url);
+      const response = await axios.get(url);
+      setCurrUserName(response.data.username);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const handleChange = (event) => {
     setFormNameField(event.target.value)
   }
 
   const handleSubmit = (event) => {
-    setCurrUserName(formNameField);
-    setGoPastHome(true)
+    addUser(formNameField);
+    setGoPastHome(true);
     event.preventDefault();
   }
 
