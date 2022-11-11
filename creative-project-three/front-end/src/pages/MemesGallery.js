@@ -31,24 +31,24 @@ const SelectedMemesPage = (props) => {
     if (third < upper) {
       return (
         <div className="saved-memes-row">
-          <Meme meme={memes[first]} key={memes[first].id} />
-          <Meme meme={memes[second]} key={memes[second].id} />
-          <Meme meme={memes[third]} key={memes[third].id} />
+          <Meme meme={memes[first]} key={memes[first].id} showButton={true} />
+          <Meme meme={memes[second]} key={memes[second].id} showButton={true} />
+          <Meme meme={memes[third]} key={memes[third].id} showButton={true} />
         </div>
       )
     }
     else if (second < upper) {
       return (
         <div className="saved-memes-row">
-          <Meme meme={memes[first]} key={memes[first].id} />
-          <Meme meme={memes[second]} key={memes[second].id} />
+          <Meme meme={memes[first]} key={memes[first].id} showButton={true} />
+          <Meme meme={memes[second]} key={memes[second].id} showButton={true} />
         </div>
       )
     }
     else if (first < upper) {
       return (
         <div className="saved-memes-row">
-          <Meme meme={memes[first]} key={memes[first].id} />
+          <Meme meme={memes[first]} key={memes[first].id} showButton={true} />
         </div>
       )
     }
