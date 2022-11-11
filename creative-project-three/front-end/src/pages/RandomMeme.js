@@ -24,9 +24,8 @@ const RandomMemePage = (props) => {
     const saveMeme = async (meme, currUserName) => {
         try {
             let url = '/api/memes/meme/add/' + currUserName;
-            console.log(url);
             const response = await axios.put(url, meme);
-            console.log(response.data.username);
+            setGetMeme(true);
         } catch (error) {
             console.log(error);
         }

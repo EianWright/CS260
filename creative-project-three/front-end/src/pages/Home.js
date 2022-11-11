@@ -9,17 +9,16 @@ const Home = (props) => {
 
   if (goPastHome) {
     return (
-      <Navigate to="meme/random" />
+      <Navigate to="/meme/random" />
     );
   }
 
   const addUser = async (username) => {
     try {
       let url = '/api/memes/user/add/' + username;
-      console.log(url);
       const response = await axios.post(url);
-      console.log(response.data.username);
       setCurrUserName(response.data.username);
+      setGoPastHome(true);
     } catch (error) {
       console.log(error);
     }
@@ -31,7 +30,6 @@ const Home = (props) => {
 
   const handleSubmit = (event) => {
     addUser(formNameField);
-    setGoPastHome(true);
     event.preventDefault();
   }
 

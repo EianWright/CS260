@@ -8,7 +8,6 @@ function Meme(props) {
 
     const deleteMeme = async (username, meme, setNeedToGetMemes) => {
         try {
-            console.log(meme);
             const response = await axios.delete('/api/memes/meme/' + username + '/' + meme.id);
             if (response.status !== 404) {
                 setNeedToGetMemes(true);

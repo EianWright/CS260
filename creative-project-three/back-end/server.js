@@ -83,10 +83,16 @@ app.get('/api/memes/meme/random', async (req, res) => {
     try {
         let url = appendAPIKEY("https://api.humorapi.com/memes/random?media-type=image&api-key=");
         let response = await axios.get(url);
+        if (response.data.code === 402) {
+            res.status(402)
+                .send('My daily usage of the API is up. Sorry :(');
+            return;
+        }
         let meme = response.data;
         res.send(meme);
     }
     catch (error) {
+        console.log(error);
         res.status(404)
             .send("Error retrieving a random meme.");
     }

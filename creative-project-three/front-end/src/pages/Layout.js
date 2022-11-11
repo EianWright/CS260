@@ -9,7 +9,7 @@ const Layout = (props) => {
             <div className="container-fluid">
                 <ul className="navbar-nav">
                     <li className="nav-item">
-                        <Link to="/" className="nav-link" >Home</Link>
+                        <Link onClick={e => setGoPastHome(false)} to="/" className="nav-link" >Home</Link>
                     </li>
                     <li className="nav-item">
                         <Link to="/meme/random" className="nav-link" >Random Meme</Link>
@@ -27,10 +27,9 @@ const Layout = (props) => {
 
     useEffect(() => {
         if (goPastHome) {
-            setGoPastHome(false);
-            <Navigate to="meme/random" />
+            <Navigate to="/meme/random" />
         }
-    }, [goPastHome]);
+    }, [goPastHome, currUserName]);
 
     return (
         <>
