@@ -5,7 +5,7 @@ import RandomMemePage from './RandomMeme'
 const RandomMemePageProxy = (props) => {
     const [setGoPastHome, goPastHome, setCurrUserName, currUserName, savedNavBar] = useOutletContext();
 
-    if (currUserName === null) {
+    if (currUserName === null || currUserName === undefined || goPastHome !== true) {
         return (
             <Navigate to="/" />
         );

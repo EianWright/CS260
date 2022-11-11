@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useOutletContext } from "react-router-dom";
 import Meme from "../Meme";
 
 const SelectedMemesPage = (props) => {
@@ -28,7 +27,7 @@ const SelectedMemesPage = (props) => {
     let first = lower;
     let second = lower + 1;
     let third = lower + 2;
-    
+
     if (third < upper) {
       return (
         <div className="saved-memes-row">
