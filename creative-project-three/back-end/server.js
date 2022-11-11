@@ -79,12 +79,11 @@ app.delete('/api/memes/meme/:username/:memeid', (req, res) => {
     }
 })
 
-app.get('/api/memes/meme/random', (req, res) => {
+app.get('/api/memes/meme/random', async (req, res) => {
     try {
         let url = appendAPIKEY("https://api.humorapi.com/memes/random?media-type=image&api-key=");
-        //let response = await axios.get(url);
-        //let meme = response.data;
-        let meme = { id: 97784, url: "https://preview.redd.it/69m9ev1bpb051.jpg?auto=webp&s=567dca2c8a02d7f6bf351ef47598a16eb7de1214" }
+        let response = await axios.get(url);
+        let meme = response.data;
         res.send(meme);
     }
     catch (error) {
