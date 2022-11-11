@@ -1,8 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const axios = require('axios');
-import Authentication from './Authentication';
-let authentication = new Authentication();
+const { appendAPIKEY } = require('./Authentication');
 
 const app = express();
 
@@ -60,7 +59,7 @@ app.get('/api/memes/meme/getall/:username', (req, res) => {
 
 app.get('/api/memes/meme/random', (req, res) => {
     try {
-        let url = authentication.appendAPIKEY("https://api.humorapi.com/memes/random?media-type=image&api-key=");
+        let url = appendAPIKEY("https://api.humorapi.com/memes/random?media-type=image&api-key=");
         console.log(url);
         //let response = await axios.get(url);
         //let meme = response.data;
