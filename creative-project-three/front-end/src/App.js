@@ -1,10 +1,9 @@
-import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./pages/Layout";
-import RandomMemePageProxy from './pages/RandomMemePageProxy';
-import SelectedMemesPage from './pages/SelectedMemesPage';
+import RandomMemePageProxy from './pages/RandomMemeProxy';
 import Home from './pages/Home'
+import MemesGalleryProxy from './pages/MemesGalleryProxy';
 
 function App() {
   return (
@@ -15,7 +14,7 @@ function App() {
           <Route path="/" element={<Layout />} >
             <Route index element={<Home />} />
             <Route path="meme/random" element={<RandomMemePageProxy />} />
-            <Route path='meme/gallery' element={<SelectedMemesPage />} />
+            <Route path='meme/gallery' element={<MemesGalleryProxy />} />
             <Route path='meme/*' element={<Navigate to="random" />} />
           </Route>
           <Route path="*" element={<Navigate to="/" />} />

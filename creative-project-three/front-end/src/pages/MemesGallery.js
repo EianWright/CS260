@@ -4,7 +4,7 @@ import { useOutletContext } from "react-router-dom";
 import Meme from "../Meme";
 
 const SelectedMemesPage = (props) => {
-  const [setGoPastHome, goPastHome, setCurrUserName, currUserName, savedNavBar] = useOutletContext();
+  const currUserName = props.currUserName;
   const [memes, setMemes] = useState([]);
 
   const getMemes = async (currUserName) => {
@@ -83,7 +83,6 @@ const SelectedMemesPage = (props) => {
 
   return (
     <>
-      {savedNavBar}
       <h2>Saved Memes</h2>
       <div>
         {createMemeComponents(memes)}
