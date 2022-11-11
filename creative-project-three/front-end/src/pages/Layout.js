@@ -9,13 +9,13 @@ const Layout = (props) => {
             <div className="container-fluid">
                 <ul className="navbar-nav">
                     <li className="nav-item">
-                        <Link className="nav-link" to="/">Home</Link>
+                        <Link to="/" className="nav-link" >Home</Link>
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link" to="/meme/random">Random Meme</Link>
+                        <Link to="/meme/random" className="nav-link" >Random Meme</Link>
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link" to="/meme/gallery">Meme Gallery</Link>
+                        <Link to="/meme/gallery" className="nav-link" >Meme Gallery</Link>
                     </li>
                 </ul>
             </div>
