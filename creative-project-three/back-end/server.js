@@ -1,5 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const axios = require('axios');
+import Authentication from './Authentication';
+let authentication = new Authentication();
 
 const app = express();
 
@@ -15,7 +18,6 @@ let savedMemes = [];
 
 app.post('/api/memes/user/add/:username', (req, res) => {
     let username = req.params.username;
-    console.log(username);
     let requestedUserMemes = savedMemes.find(memes => memes.username == username);
     if (requestedUserMemes === undefined) {
         requestedUserMemes = {
@@ -24,22 +26,18 @@ app.post('/api/memes/user/add/:username', (req, res) => {
         };
         savedMemes.push(requestedUserMemes);
     }
-    console.log(requestedUserMemes);
     res.send(requestedUserMemes);
 });
 
 app.put('/api/memes/meme/add/:username', (req, res) => {
     let username = req.params.username;
-    console.log(username);
     let requestedUserMemes = savedMemes.find(memes => memes.username == username);
-    console.log(requestedUserMemes);
     if (requestedUserMemes === undefined) {
         res.status(404)
             .send("That user does not exist.");
         return;
     }
     else {
-        console.log(req.body);
         requestedUserMemes.savedMemes.push(req.body);
         res.send("Success");
         return;
@@ -57,6 +55,22 @@ app.get('/api/memes/meme/getall/:username', (req, res) => {
     else {
         res.send(requestedUserMemes.savedMemes);
         return;
+    }
+});
+
+app.get('/api/memes/meme/random', (req, res) => {
+    try {
+        let url = authentication.appendAPIKEY("https://api.humorapi.com/memes/random?media-type=image&api-key=");
+        console.log(url);
+        //let response = await axios.get(url);
+        //let meme = response.data;
+        let meme = { id: 97784, url: "https://preview.redd.it/69m9ev1bpb051.jpg?auto=webp&s=567dca2c8a02d7f6bf351ef47598a16eb7de1214" }
+        res.send(meme);
+    }
+    catch (error) {
+        console.log("Error" + error);
+        res.status(404)
+            .send("Error retrieving a random meme.");
     }
 });
 

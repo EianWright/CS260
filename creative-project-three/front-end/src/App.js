@@ -7,9 +7,6 @@ import SelectedMemesPage from './pages/SelectedMemesPage';
 import Home from './pages/Home'
 
 function App() {
-
-  
-
   return (
     <div className="App">
       <h1>Creative Project 3</h1>

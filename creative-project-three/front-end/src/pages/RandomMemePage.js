@@ -1,8 +1,7 @@
 import axios from 'axios';
 import Meme from '../Meme';
 import { useState, useEffect, useRef } from 'react';
-import Authentication from '../Authentication';
-let authentication = new Authentication();
+
 
 const RandomMemePage = (props) => {
 
@@ -12,11 +11,9 @@ const RandomMemePage = (props) => {
 
     const getRandomMeme = async () => {
         try {
-            let url = authentication.appendAPIKEY("https://api.humorapi.com/memes/random?media-type=image&api-key=");
-            console.log(url);
-            //let response = await axios.get(url);
-            //let meme = response.data;
-            let meme = { id: 97784, url: "https://preview.redd.it/69m9ev1bpb051.jpg?auto=webp&s=567dca2c8a02d7f6bf351ef47598a16eb7de1214" }
+            let url = '/api/memes/meme/random';
+            const response = await axios.get(url);
+            let meme = response.data;
             setMeme(meme);
         }
         catch (error) {
