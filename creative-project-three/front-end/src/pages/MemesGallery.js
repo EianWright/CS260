@@ -6,6 +6,7 @@ import Meme from "../Meme";
 const SelectedMemesPage = (props) => {
   const currUserName = props.currUserName;
   const [memes, setMemes] = useState([]);
+  const [needToGetMemes, setNeedToGetMemes] = useState(true);
 
   const getMemes = async (currUserName) => {
     try {
@@ -17,38 +18,38 @@ const SelectedMemesPage = (props) => {
   }
 
   useEffect(() => {
-    getMemes(currUserName);
-  }, [currUserName]);
+    if (needToGetMemes) {
+      getMemes(currUserName);
+      setNeedToGetMemes(false);
+    }
+  }, [needToGetMemes]);
 
   const getMemeRow = (memes, lower, upper) => {
     let first = lower;
     let second = lower + 1;
     let third = lower + 2;
-
-    console.log(third);
-    console.log(upper);
-
+    
     if (third < upper) {
       return (
         <div className="saved-memes-row">
-          <Meme meme={memes[first]} key={memes[first].id} showButton={true} />
-          <Meme meme={memes[second]} key={memes[second].id} showButton={true} />
-          <Meme meme={memes[third]} key={memes[third].id} showButton={true} />
+          <Meme meme={memes[first]} key={memes[first].id} username={currUserName} setNeedToGetMemes={setNeedToGetMemes} />
+          <Meme meme={memes[second]} key={memes[second].id} username={currUserName} setNeedToGetMemes={setNeedToGetMemes} />
+          <Meme meme={memes[third]} key={memes[third].id} username={currUserName} setNeedToGetMemes={setNeedToGetMemes} />
         </div>
       )
     }
     else if (second < upper) {
       return (
         <div className="saved-memes-row">
-          <Meme meme={memes[first]} key={memes[first].id} showButton={true} />
-          <Meme meme={memes[second]} key={memes[second].id} showButton={true} />
+          <Meme meme={memes[first]} key={memes[first].id} username={currUserName} setNeedToGetMemes={setNeedToGetMemes} />
+          <Meme meme={memes[second]} key={memes[second].id} username={currUserName} setNeedToGetMemes={setNeedToGetMemes} />
         </div>
       )
     }
     else if (first < upper) {
       return (
         <div className="saved-memes-row">
-          <Meme meme={memes[first]} key={memes[first].id} showButton={true} />
+          <Meme meme={memes[first]} key={memes[first].id} username={currUserName} setNeedToGetMemes={setNeedToGetMemes} />
         </div>
       )
     }
@@ -71,8 +72,6 @@ const SelectedMemesPage = (props) => {
         if (upper > length) {
           upper = length;
         }
-        console.log(i);
-        console.log(upper);
         rows.push(getMemeRow(memes, i, upper));
       }
       return (<>

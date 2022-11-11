@@ -57,17 +57,37 @@ app.get('/api/memes/meme/getall/:username', (req, res) => {
     }
 });
 
+app.delete('/api/memes/meme/:username/:memeid', (req, res) => {
+    let username = req.params.username;
+    let toDeleteID = req.params.memeid;
+    let requestedUserMemes = savedMemes.find(memes => memes.username == username);
+    if (requestedUserMemes === undefined) {
+        res.status(404)
+            .send("That user does not exist.");
+        return;
+    }
+    else {
+        let beforeDeleteSize = requestedUserMemes.savedMemes.length;
+        requestedUserMemes.savedMemes = requestedUserMemes.savedMemes.filter(meme => meme.id != toDeleteID);
+        if (requestedUserMemes.savedMemes.length != beforeDeleteSize) {
+            res.send(toDeleteID);
+        }
+        else {
+            res.status(404)
+                .send("No meme found with provided id or name to delete.");
+        }
+    }
+})
+
 app.get('/api/memes/meme/random', (req, res) => {
     try {
         let url = appendAPIKEY("https://api.humorapi.com/memes/random?media-type=image&api-key=");
-        console.log(url);
         //let response = await axios.get(url);
         //let meme = response.data;
         let meme = { id: 97784, url: "https://preview.redd.it/69m9ev1bpb051.jpg?auto=webp&s=567dca2c8a02d7f6bf351ef47598a16eb7de1214" }
         res.send(meme);
     }
     catch (error) {
-        console.log("Error" + error);
         res.status(404)
             .send("Error retrieving a random meme.");
     }
