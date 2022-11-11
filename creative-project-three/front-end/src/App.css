@@ -43,6 +43,7 @@
 .meme-image {
   width: auto;
   height: auto;
+  padding: 25px;
 }
 
 .new-meme-container {
@@ -59,4 +60,8 @@
 .repo-footer {
   margin-top: 20px;
   margin-bottom: 10px;
+}
+
+.saved-memes-row {
+  
 }
