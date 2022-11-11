@@ -24,6 +24,17 @@ const RandomMemePage = (props) => {
         }
     }
 
+    const saveMeme = async (meme, currUserName) => {
+        try {
+            let url = '/api/memes/meme/add/' + currUserName;
+            console.log(url);
+            const response = await axios.put(url, meme);
+            console.log(response.data.username);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     // This and the dataFetchedRef are only needed in development to avoid calling the API twice on page reload.
     useEffect(() => {
         if (dataFetchedRef.current) return;
@@ -38,16 +49,20 @@ const RandomMemePage = (props) => {
         }
     }, [getMeme]);
 
-
-
     return (
         <>
-            <p>This uses the <a href="https://humorapi.com/docs/#Random-Meme">Humor Api's random meme endpoint</a> to get a random meme.
-                <button className='new-meme-button' onClick={() => {
+            <p>This uses the <a href="https://humorapi.com/docs/#Random-Meme">Humor Api's random meme endpoint</a> to get a random meme.</p>
+            <div>
+                <button className='meme-button' onClick={() => {
                     setGetMeme(true);
                 }}>New Meme</button>
-            </p>
-            <Meme key={meme.id} meme={meme} setMeme={setMeme} />
+                <button className='meme-button' onClick={() => {
+                    saveMeme(meme, props.currUserName);
+                }}>Save Meme</button>
+            </div>
+            <div className="new-meme-container">
+                <Meme key={meme.id} meme={meme} setMeme={setMeme} />
+            </div>
         </>
     );
 }

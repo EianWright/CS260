@@ -17,7 +17,8 @@ const Home = (props) => {
     try {
       let url = '/api/memes/user/add/' + username;
       console.log(url);
-      const response = await axios.get(url);
+      const response = await axios.post(url);
+      console.log(response.data.username);
       setCurrUserName(response.data.username);
     } catch (error) {
       console.log(error);

@@ -28,17 +28,20 @@ app.post('/api/memes/user/add/:username', (req, res) => {
     res.send(requestedUserMemes);
 });
 
-app.post('/api/memes/meme/add/:username', (req, res) => {
+app.put('/api/memes/meme/add/:username', (req, res) => {
     let username = req.params.username;
+    console.log(username);
     let requestedUserMemes = savedMemes.find(memes => memes.username == username);
+    console.log(requestedUserMemes);
     if (requestedUserMemes === undefined) {
         res.status(404)
             .send("That user does not exist.");
         return;
     }
     else {
+        console.log(req.body);
         requestedUserMemes.savedMemes.push(req.body);
-        res.send(req.body);
+        res.send("Success");
         return;
     }
 });
@@ -57,4 +60,4 @@ app.get('/api/memes/meme/getall/:username', (req, res) => {
     }
 });
 
-app.listen(3000, () => console.log('Server listening on port 3000!'));
+app.listen(3002, () => console.log('Server listening on port 3002!'));

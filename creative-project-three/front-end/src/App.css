@@ -45,15 +45,15 @@
   height: auto;
 }
 
-.meme-container {
-  width: 50%;
+.new-meme-container {
+  width: 40%;
 }
 
-.new-meme-button {
+.meme-button {
   font-size: 14px;
   padding-top: 2px;
   padding-bottom: 2px;
-  margin-left: 10px;
+  margin: 10px;
 }
 
 .repo-footer {
