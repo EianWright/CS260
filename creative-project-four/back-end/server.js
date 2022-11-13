@@ -1,31 +1,104 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const axios = require('axios');
+const mongoose = require('mongoose');
 const { appendAPIKEY } = require('./Authentication');
 
 const app = express();
-
-// parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({
     extended: false
 }));
-
-// parse application/json
 app.use(bodyParser.json());
+
+mongoose.connect('mongodb://localhost:27017/test', {
+    useUnifiedTopology: true,
+    useNewUrlParser: true
+});
+
+const userSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        unique: true,
+        required: true,
+        index: true
+    },
+    joinTime: Date,
+});
+
+userSchema.virtual('id')
+    .get(function () {
+        return this._id.toHexString();
+    });
+
+userSchema.set('toJSON', {
+    virtuals: true
+});
+
+const User = mongoose.model('User', userSchema);
+
+const memeSchema = new mongoose.Schema({
+    providedID: { 
+        type: Number, 
+        unique: true,
+        required: true,
+        index: true },
+    url: String,
+    timesViewed: Number,
+});
+
+memeSchema.set('toJSON', {
+    virtuals: true
+});
+
+const Meme = mongoose.model('Meme', memeSchema);
+
+const savedMemeSchema = new mongoose.Schema({
+    memeID: Number,
+    savedByUser: { 
+        type: String, 
+        unique: true,
+        required: true,
+        index: true },
+    savedTime: Date,
+});
+
+savedMemeSchema.set('toJSON', {
+    virtuals: true
+});
+
+const SavedMeme = mongoose.model('SavedMeme', savedMemeSchema);
 
 let savedMemes = [];
 
-app.post('/api/memes/user/add/:username', (req, res) => {
-    let username = req.params.username;
-    let requestedUserMemes = savedMemes.find(memes => memes.username == username);
-    if (requestedUserMemes === undefined) {
-        requestedUserMemes = {
-            username: username,
-            savedMemes: []
-        };
-        savedMemes.push(requestedUserMemes);
+app.post('/api/v4/user/:username', async (req, res) => {
+    const user = new User({
+        name: req.params.username,
+        joinTime: Date().now,
+    });
+    try {
+        await user.save();
+        res.send({ user: user });
     }
-    res.send(requestedUserMemes);
+    catch (err) {  // TODO: Replace with more specific catch for when a name has already been registered.
+        console.log(err);
+        res.sendStatus(500);
+    }
+});
+
+app.get('/api/v4/user/:username', async (req, res) => {
+    const query = User.where({ name: req.params.username });
+    try {
+        let user = await query.findOne();
+        console.log(user);
+        if (user === null) {
+            res.sendStatus(404);  // TODO: Replace with specific message/code for when user isn't found.
+            return;
+        }
+        res.send({ user: user });
+    }
+    catch (error) {
+        res.sendStatus(500);
+    }
 });
 
 app.put('/api/memes/meme/add/:username', (req, res) => {
@@ -98,4 +171,4 @@ app.get('/api/memes/meme/random', async (req, res) => {
     }
 });
 
-app.listen(3002, () => console.log('Server listening on port 3002!'));
+app.listen(3001, () => console.log('Server listening on port 3001!'));  // Running this on 3001. 3000, 3001, and 3002 are being used now.
