@@ -19,6 +19,17 @@ const test2 = async () => {
         let response = await axios.get('http://localhost:3001/api/v4/user/sally');
         console.log("Success");
         console.log(response.data);
+
+        let tryingMeme = await axios.get('http://localhost:3001/api/v4/meme/random');
+        console.log("Worked again.");
+        console.log(tryingMeme.data);
+
+        let url = 'http://localhost:3001/api/v4/meme/saved/' + tryingMeme.data.id + '/' + response.data.user.id;
+        console.log(url);
+        let savedMeme = await axios.post(url);
+        console.log("final worked");
+        console.log(savedMeme.data);
+        
     }
     catch(err) {
         console.log(err.message);
@@ -27,7 +38,7 @@ const test2 = async () => {
 
 test2();
 
-const test3 = async () => {
+/*const test3 = async () => {
     try {
         let response = await axios.get('http://localhost:3001/api/v4/user/none');
         console.log(response.data);
@@ -38,4 +49,4 @@ const test3 = async () => {
     }
 }
 
-test3();
+test3();*/

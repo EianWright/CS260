@@ -37,14 +37,20 @@ userSchema.set('toJSON', {
 const User = mongoose.model('User', userSchema);
 
 const memeSchema = new mongoose.Schema({
-    providedID: { 
-        type: Number, 
+    providedID: {
+        type: Number,
         unique: true,
         required: true,
-        index: true },
+        index: true
+    },
     url: String,
     timesViewed: Number,
 });
+
+memeSchema.virtual('id')
+    .get(function () {
+        return this._id.toHexString();
+    });
 
 memeSchema.set('toJSON', {
     virtuals: true
@@ -53,12 +59,12 @@ memeSchema.set('toJSON', {
 const Meme = mongoose.model('Meme', memeSchema);
 
 const savedMemeSchema = new mongoose.Schema({
-    memeID: Number,
-    savedByUser: { 
-        type: String, 
-        unique: true,
+    memeID: String,
+    savedByUser: {
+        type: String,
         required: true,
-        index: true },
+        index: true
+    },
     savedTime: Date,
 });
 
@@ -73,7 +79,7 @@ let savedMemes = [];
 app.post('/api/v4/user/:username', async (req, res) => {
     const user = new User({
         name: req.params.username,
-        joinTime: Date().now,
+        joinTime: Date.now(),
     });
     try {
         await user.save();
@@ -89,7 +95,6 @@ app.get('/api/v4/user/:username', async (req, res) => {
     const query = User.where({ name: req.params.username });
     try {
         let user = await query.findOne();
-        console.log(user);
         if (user === null) {
             res.sendStatus(404);  // TODO: Replace with specific message/code for when user isn't found.
             return;
@@ -97,6 +102,38 @@ app.get('/api/v4/user/:username', async (req, res) => {
         res.send({ user: user });
     }
     catch (error) {
+        res.sendStatus(500);
+    }
+});
+
+app.post('/api/v4/meme/saved/:memeid/:userid', async (req, res) => {
+    try {  // TODO: Structure with promise instead await so that synchronous calls to the database can occur, causing less wait time.
+        let user = await User.findById(req.params.userid).exec();
+        console.log(user);
+        if (user === null) {  // User doesn't exist.
+            console.log("User not found");
+            res.sendStatus(404);  // TODO: Replace with specific message/code for when user isn't found.
+            return;
+        }
+
+        let meme = await Meme.findById(req.params.memeid).exec();
+        console.log(meme);
+        if (meme === null) {  // Meme doesn't exist.
+            console.log("Meme doesn't exist.")
+            res.sendStatus(404);  // TODO: Replace with specific message/code for when meme isn't found.
+            return;
+        }
+
+        const savedMeme = new SavedMeme({
+            memeID: meme.id,
+            savedByUser: user.id,
+            savedTime: Date.now()
+        })
+        await savedMeme.save();
+        res.send({ savedMeme: savedMeme });
+    }
+    catch (error) {
+        console.log(error.message);
         res.sendStatus(500);
     }
 });
@@ -152,7 +189,7 @@ app.delete('/api/memes/meme/:username/:memeid', (req, res) => {
     }
 })
 
-app.get('/api/memes/meme/random', async (req, res) => {
+app.get('/api/v4/meme/random', async (req, res) => {
     try {
         let url = appendAPIKEY("https://api.humorapi.com/memes/random?media-type=image&api-key=");
         let response = await axios.get(url);
@@ -161,7 +198,13 @@ app.get('/api/memes/meme/random', async (req, res) => {
                 .send('My daily usage of the API is up. Sorry :(');
             return;
         }
-        let meme = response.data;
+        let randomMeme = response.data;
+        const meme = new Meme({
+            providedID: randomMeme.id,
+            url: randomMeme.url,
+            timesViewed: 1
+        });
+        await meme.save();
         res.send(meme);
     }
     catch (error) {
