@@ -1,6 +1,7 @@
 .vscode
 node_modules
 config.js
+random.txt
 
 # Added until finished and needed to be switched over to graded.
 creative-project-four
