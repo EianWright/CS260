@@ -1,11 +1,14 @@
 import { useOutletContext, Navigate } from "react-router-dom";
 import MemesGallery from './MemesGallery'
+import Navbar from './Navbar'
 
 
-const MemesGalleryProxy = (props) => {
-    const [setGoPastHome, goPastHome, setCurrUserName, currUserName, savedNavBar] = useOutletContext();
+const MemesGalleryProxy = () => {
+    const [props] = useOutletContext();
 
-    if (currUserName === null || currUserName === undefined || goPastHome !== true) {
+    const currUser = props.currUser;
+    if (currUser === null || currUser === undefined || currUser === "" || currUser.id === null || 
+        currUser.id === undefined || currUser.id === "" || props.goPastHome !== true) {
         return (
             <Navigate to="/" />
         );
@@ -13,8 +16,8 @@ const MemesGalleryProxy = (props) => {
     else {
         return (
             <>
-                {savedNavBar}
-                <MemesGallery currUserName={currUserName} />
+                <Navbar setGoPastHome={props.setGoPastHome} />
+                <MemesGallery currUserID={currUser.id} />
             </>
         )
     }

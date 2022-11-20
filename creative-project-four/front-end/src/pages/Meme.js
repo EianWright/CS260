@@ -2,13 +2,15 @@ import React from "react";
 import axios from 'axios';
 
 function Meme(props) {
-    const username = props.username;
+    const currUserID = props.userID;
     const meme = props.meme;
     const setNeedToGetMemes = props.setNeedToGetMemes;
 
-    const deleteMeme = async (username, meme, setNeedToGetMemes) => {
+    const deleteMeme = async (userID, memeID, setNeedToGetMemes) => {
         try {
-            const response = await axios.delete('/api/memes/meme/' + username + '/' + meme.id);
+            let url = '/api/v4/meme/saved/' + userID + '/' + memeID;
+            console.log(url);
+            const response = await axios.delete(url);
             if (response.status !== 404) {
                 setNeedToGetMemes(true);
             }
@@ -18,11 +20,16 @@ function Meme(props) {
         }
     }
 
+    if (meme.url === "" || meme.url === undefined || meme.url === null) {
+        return (
+            <></>
+        );
+    }
     if (setNeedToGetMemes !== undefined) {
         return (
             <div className="meme-with-button">
                 <img alt="Random meme" src={meme.url} className="meme-image" />
-                <button onClick={e => deleteMeme(username, meme, setNeedToGetMemes)} className="remove-meme-button">Remove</button>
+                <button onClick={e => deleteMeme(currUserID, meme.id, setNeedToGetMemes)} className="remove-meme-button">Remove</button>
             </div>
         );
     }

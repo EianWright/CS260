@@ -49,6 +49,10 @@
   width: 40%;
 }
 
+.no-meme-container {
+  display: none;
+}
+
 .meme-button {
   font-size: 14px;
   padding-top: 2px;
@@ -80,4 +84,26 @@
 
 .remove-meme-button {
   margin-top: 5px;
+}
+
+.error-message {
+  background-color: #FF9494;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+.error-message > p {
+  margin: 0px;
+  font-weight: 500;
+}
+
+.success-message {
+  background-color: #90ee90;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+.success-message > p {
+  margin: 0px;
+  font-weight: 500;
 }

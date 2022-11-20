@@ -1,5 +1,6 @@
 import axios from 'axios';
-import Meme from '../Meme';
+import Meme from './Meme';
+import MessageDisplay from './MessageDisplay';
 import { useState, useEffect, useRef } from 'react';
 
 
@@ -7,36 +8,52 @@ const RandomMemePage = (props) => {
 
     const [meme, setMeme] = useState({ id: "", url: "" });
     const [getMeme, setGetMeme] = useState(false);
+    const [message, setMessage] = useState({ messageType: 0, messageText: "" });
     const dataFetchedRef = useRef(false);
 
     const getRandomMeme = async () => {
         try {
-            let url = '/api/memes/meme/random';
+            setMessage({ messageType: 0, messageText: "" });
+            let url = '/api/v4/meme/random';
             const response = await axios.get(url);
             let meme = response.data;
             setMeme(meme);
+            props.setLastMeme(meme);
         }
         catch (error) {
-            console.log("Error" + error);
+            setMessage({ messageType: 1, messageText: "Sorry, there was an error retrieving a random meme." });
         }
     }
 
-    const saveMeme = async (meme, currUserName) => {
+    const saveMeme = async (meme, currUserID) => {
         try {
-            let url = '/api/memes/meme/add/' + currUserName;
-            const response = await axios.put(url, meme);
-            setGetMeme(true);
+            let url = '/api/v4/meme/saved/' + currUserID + '/' + meme.id;
+            const response = await axios.post(url, meme);
+            if (response.status === 204) {
+                setMessage({ messageType: 1, messageText: "Meme has already been saved!" });
+            }
+            else {
+                setMessage({ messageType: 2, messageText: "Meme successfully saved!" });
+            }
         } catch (error) {
-            console.log(error);
+            let message = "Error: " + error.message;
+            setMessage({ messageType: 1, messageText: message });
+
         }
     }
 
     // This and the dataFetchedRef are only needed in development to avoid calling the API twice on page reload.
     useEffect(() => {
-        if (dataFetchedRef.current) return;
-        dataFetchedRef.current = true;
-        getRandomMeme();
-    })
+        if (dataFetchedRef.current) {
+            return;
+        }
+        else {
+            dataFetchedRef.current = true;
+            if (props.lastMeme.url !== "") {
+                setMeme(props.lastMeme);
+            }
+        }
+    }, [props.lastMeme]);
 
     useEffect(() => {
         if (getMeme) {
@@ -45,16 +62,30 @@ const RandomMemePage = (props) => {
         }
     }, [getMeme]);
 
+    const getSaveButton = () => {
+        if (meme.url === "" || meme.url === undefined || meme.url === null) {
+            return (
+                <></>
+            )
+        }
+        else {
+            return (
+                <button className='meme-button' onClick={() => {
+                    saveMeme(meme, props.currUser.id);
+                }}>Save Meme</button>
+            );
+        }
+    }
+
     return (
         <>
-            <p>This uses the <a href="https://humorapi.com/docs/#Random-Meme">Humor Api's random meme endpoint</a> to get a random meme.</p>
+            <p>Welcome {props.currUser.name}. This uses the <a href="https://humorapi.com/docs/#Random-Meme">Humor Api's random meme endpoint</a> to get a random meme. Click "New Meme" to get started.</p>
+            <MessageDisplay message={message} />
             <div>
                 <button className='meme-button' onClick={() => {
                     setGetMeme(true);
                 }}>New Meme</button>
-                <button className='meme-button' onClick={() => {
-                    saveMeme(meme, props.currUserName);
-                }}>Save Meme</button>
+                {getSaveButton()}
             </div>
             <div className="new-meme-container">
                 <Meme key={meme.id} meme={meme} setMeme={setMeme} />

@@ -2,12 +2,12 @@ import { useState } from "react";
 import axios from 'axios';
 import { useOutletContext, Navigate } from "react-router-dom";
 
-const Home = (props) => {
-  const [setGoPastHome, goPastHome, setCurrUserName, currUserName, savedNavBar] = useOutletContext();
+const Home = () => {
+  const [props] = useOutletContext();
 
-  const [formNameField, setFormNameField] = useState(currUserName);
+  const [formNameField, setFormNameField] = useState(() => {return props.currUser.name;});
 
-  if (goPastHome) {
+  if (props.goPastHome) {
     return (
       <Navigate to="/meme/random" />
     );
@@ -15,10 +15,10 @@ const Home = (props) => {
 
   const addUser = async (username) => {
     try {
-      let url = '/api/memes/user/add/' + username;
+      let url = '/api/v4/user/' + username;
       const response = await axios.post(url);
-      setCurrUserName(response.data.username);
-      setGoPastHome(true);
+      props.setCurrUser(response.data.user);
+      props.setGoPastHome(true);
     } catch (error) {
       console.log(error);
     }

@@ -8,7 +8,7 @@ import MemesGalleryProxy from './pages/MemesGalleryProxy';
 function App() {
   return (
     <div className="App">
-      <h1>Creative Project 3</h1>
+      <h1>Creative Project 4</h1>
       <BrowserRouter basename='/CS260/creative-project-three/front-end/build'>
         <Routes>
           <Route path="/" element={<Layout />} >
@@ -21,7 +21,7 @@ function App() {
         </Routes>
       </BrowserRouter>
       <footer className='repo-footer'>
-        <a href='https://github.com/EianWright/CS260/tree/main/creative-project-three'>Creative Project Three GitHub Repo</a>
+        <a href='https://github.com/EianWright/CS260/tree/main/creative-project-four'>Creative Project Four GitHub Repo</a>
       </footer>
     </div>
   );

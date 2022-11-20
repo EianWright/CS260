@@ -68,35 +68,91 @@ const savedMemeSchema = new mongoose.Schema({
     savedTime: Date,
 });
 
+savedMemeSchema.index({ memeID: 1, savedByUser: 1 }, { unique: true });
+
 savedMemeSchema.set('toJSON', {
     virtuals: true
 });
 
 const SavedMeme = mongoose.model('SavedMeme', savedMemeSchema);
 
-let savedMemes = [];
+async function getUser(username) {
+    const query = User.where({ name: username });
+    let user = await query.findOne();
+    return user;
+}
 
-app.post('/api/v4/user/:username', async (req, res) => {
-    const user = new User({
-        name: req.params.username,
-        joinTime: Date.now(),
+async function getMeme(memeID) {
+    return new Promise(function (myResolve, myReject) {
+        Meme.findById(memeID).exec().then(
+            async function (value) {
+                try {
+                    let meme = value;
+                    newTimesViewed = meme.timesViewed + 1;
+                    let updatedMeme = await Meme.findByIdAndUpdate(value.id, { timesViewed: newTimesViewed })
+                    myResolve(updatedMeme);
+                }
+                catch (error) {
+                    myReject(error)
+                }
+            },
+            function (error) {
+                myReject(error);
+            }
+        );
     });
+    
+};
+
+function getQueryPromise(query, compareFunc) {
+    return new Promise(function (myResolve, myReject) {
+        query.then(
+            function (value) {
+                if (compareFunc(value)) {
+                    myReject("No object found");
+                }
+                else {
+                    myResolve(value);
+                }
+            },
+            function (error) {
+                myReject(error);
+            }
+        )
+    });
+};
+
+function checkIfNull(value) {
+    return value === null;
+};
+
+app.post('/api/v4/user/:username', async (req, res) => {  // If doing an actual account sort of thing, need to throw an error if a username has been already taken.
     try {
-        await user.save();
-        res.send({ user: user });
+        let alreadyExistingUser = await getUser(req.params.username);
+        if (alreadyExistingUser !== null) {
+            res.send({ user: alreadyExistingUser });
+            return;
+        }
+        else {
+            const user = new User({
+                name: req.params.username,
+                joinTime: Date.now(),
+            });
+            await user.save();
+            res.send({ user: user });
+        }
     }
-    catch (err) {  // TODO: Replace with more specific catch for when a name has already been registered.
+    catch (err) {
         console.log(err);
         res.sendStatus(500);
     }
 });
 
 app.get('/api/v4/user/:username', async (req, res) => {
-    const query = User.where({ name: req.params.username });
     try {
-        let user = await query.findOne();
+        let user = await getUser(req.params.username);
         if (user === null) {
-            res.sendStatus(404);  // TODO: Replace with specific message/code for when user isn't found.
+            res.sendStatus(404);
             return;
         }
         res.send({ user: user });
@@ -106,86 +162,108 @@ app.get('/api/v4/user/:username', async (req, res) => {
     }
 });
 
-app.post('/api/v4/meme/saved/:memeid/:userid', async (req, res) => {
+app.post('/api/v4/meme/saved/:userid/:memeid', async (req, res) => {  //TODO: Add check that meme hasn't already been saved and throw error
     try {  // TODO: Structure with promise instead await so that synchronous calls to the database can occur, causing less wait time.
-        let user = await User.findById(req.params.userid).exec();
-        console.log(user);
-        if (user === null) {  // User doesn't exist.
-            console.log("User not found");
-            res.sendStatus(404);  // TODO: Replace with specific message/code for when user isn't found.
+        let userID = req.params.userid;
+        let memeID = req.params.memeid;
+        let checks = [getQueryPromise(User.findById(userID).exec(), checkIfNull), getQueryPromise(Meme.findById(memeID).exec(), checkIfNull)]
+        let passed = await Promise.all(checks).then((values) => {
+            return true;
+        }).catch((error) => {
+            //console.error(error);
+            return false;
+        });
+        if (!passed) {
+            res.sendStatus(404);
             return;
         }
 
-        let meme = await Meme.findById(req.params.memeid).exec();
-        console.log(meme);
-        if (meme === null) {  // Meme doesn't exist.
-            console.log("Meme doesn't exist.")
-            res.sendStatus(404);  // TODO: Replace with specific message/code for when meme isn't found.
+        let query = SavedMeme.where({ memeID: memeID, savedByUser: userID });
+        let alreadyExistsSavedMeme = await query.findOne();
+        if (alreadyExistsSavedMeme !== null) {
+            res.sendStatus(204);
             return;
         }
-
-        const savedMeme = new SavedMeme({
-            memeID: meme.id,
-            savedByUser: user.id,
-            savedTime: Date.now()
-        })
-        await savedMeme.save();
-        res.send({ savedMeme: savedMeme });
+        else {
+            const savedMeme = new SavedMeme({
+                memeID: memeID,
+                savedByUser: userID,
+                savedTime: Date.now()
+            });
+            await savedMeme.save();
+            res.send({ savedMeme: savedMeme });
+        }
     }
     catch (error) {
-        console.log(error.message);
+        console.log(error);
         res.sendStatus(500);
     }
 });
 
-app.put('/api/memes/meme/add/:username', (req, res) => {
-    let username = req.params.username;
-    let requestedUserMemes = savedMemes.find(memes => memes.username == username);
-    if (requestedUserMemes === undefined) {
-        res.status(404)
-            .send("That user does not exist.");
-        return;
+app.get('/api/v4/meme/saved/:userid', async (req, res) => {
+    try {
+        const query = SavedMeme.where({ savedByUser: req.params.userid })
+            .sort({ savedTime: -1 });
+        let savedMemes = await query.find();
+        if (savedMemes === null) {
+            res.sendStatus(204);
+        }
+        let memes = await Promise.allSettled(savedMemes.map(async (savedMeme) => {
+            return getMeme(savedMeme.memeID);
+        }));
+        memes = memes.filter((value) => {
+            return value.status === 'fulfilled';
+        });
+        memes = memes.map((value) => {
+            let meme = value.value;
+            meme.id = meme._id.toHexString();
+            return meme;
+        });
+        res.send(memes);
     }
-    else {
-        requestedUserMemes.savedMemes.push(req.body);
-        res.send("Success");
-        return;
-    }
-});
-
-app.get('/api/memes/meme/getall/:username', (req, res) => {
-    let username = req.params.username;
-    let requestedUserMemes = savedMemes.find(memes => memes.username == username);
-    if (requestedUserMemes === undefined) {
-        res.status(404)
-            .send("That user does not exist.");
-        return;
-    }
-    else {
-        res.send(requestedUserMemes.savedMemes);
-        return;
+    catch (error) {
+        console.log(error);
+        res.sendStatus(500);
     }
 });
 
-app.delete('/api/memes/meme/:username/:memeid', (req, res) => {
-    let username = req.params.username;
-    let toDeleteID = req.params.memeid;
-    let requestedUserMemes = savedMemes.find(memes => memes.username == username);
-    if (requestedUserMemes === undefined) {
-        res.status(404)
-            .send("That user does not exist.");
-        return;
-    }
-    else {
-        let beforeDeleteSize = requestedUserMemes.savedMemes.length;
-        requestedUserMemes.savedMemes = requestedUserMemes.savedMemes.filter(meme => meme.id != toDeleteID);
-        if (requestedUserMemes.savedMemes.length != beforeDeleteSize) {
-            res.send(toDeleteID);
+app.get('/api/v4/meme/saved/:userid/:memeid', async (req, res) => {
+    try {
+        let userID = req.params.userid;
+        let memeID = req.params.memeid;
+        const query = SavedMeme.where({ savedByUser: userID, memeID: memeID })
+        let savedMeme = await query.findOne();
+        if (savedMeme === undefined) {
+            res.sendStatus(204);
+            return;
         }
         else {
-            res.status(404)
-                .send("No meme found with provided id or name to delete.");
+            res.send(savedMeme);
+            return;
         }
+    }
+    catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
+});
+
+app.delete('/api/v4/meme/saved/:userid/:memeid', async (req, res) => {
+    try {
+        const query = SavedMeme.where({ savedByUser: req.params.userid, memeID: req.params.memeid });
+        let savedMeme = await query.findOneAndDelete();
+        if (savedMeme === undefined) {
+            res.sendStatus(404);
+            return;
+        }
+        else {
+            res.send(savedMeme);
+            return;
+        }
+    }
+    catch (error) {
+        console.log(error);
+        res.sendStatus(500);
     }
 })
 
@@ -199,6 +277,13 @@ app.get('/api/v4/meme/random', async (req, res) => {
             return;
         }
         let randomMeme = response.data;
+        let query = Meme.where({ providedID: randomMeme.providedID });
+        let foundMeme = await query.findOne();
+        console.log(foundMeme);
+        if (foundMeme !== null) {
+            res.send(foundMeme);
+            return;
+        }
         const meme = new Meme({
             providedID: randomMeme.id,
             url: randomMeme.url,
@@ -209,7 +294,7 @@ app.get('/api/v4/meme/random', async (req, res) => {
     }
     catch (error) {
         console.log(error);
-        res.status(404)
+        res.status(500)
             .send("Error retrieving a random meme.");
     }
 });

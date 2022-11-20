@@ -1,15 +1,15 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Meme from "../Meme";
+import Meme from "./Meme";
 
 const SelectedMemesPage = (props) => {
-  const currUserName = props.currUserName;
+  const currUserID = props.currUserID;
   const [memes, setMemes] = useState([]);
   const [needToGetMemes, setNeedToGetMemes] = useState(true);
 
-  const getMemes = async (currUserName) => {
+  const getMemes = async (currUserID) => {
     try {
-      const response = await axios.get('/api/memes/meme/getall/' + currUserName);
+      const response = await axios.get('/api/v4/meme/saved/' + currUserID);
       setMemes(response.data);
     } catch (error) {
       console.log(error);
@@ -18,7 +18,7 @@ const SelectedMemesPage = (props) => {
 
   useEffect(() => {
     if (needToGetMemes) {
-      getMemes(currUserName);
+      getMemes(currUserID);
       setNeedToGetMemes(false);
     }
   }, [needToGetMemes]);
@@ -31,24 +31,24 @@ const SelectedMemesPage = (props) => {
     if (third < upper) {
       return (
         <div className="saved-memes-row">
-          <Meme meme={memes[first]} key={memes[first].id} username={currUserName} setNeedToGetMemes={setNeedToGetMemes} />
-          <Meme meme={memes[second]} key={memes[second].id} username={currUserName} setNeedToGetMemes={setNeedToGetMemes} />
-          <Meme meme={memes[third]} key={memes[third].id} username={currUserName} setNeedToGetMemes={setNeedToGetMemes} />
+          <Meme meme={memes[first]} key={memes[first].id} userID={currUserID} setNeedToGetMemes={setNeedToGetMemes} />
+          <Meme meme={memes[second]} key={memes[second].id} userID={currUserID} setNeedToGetMemes={setNeedToGetMemes} />
+          <Meme meme={memes[third]} key={memes[third].id} userID={currUserID} setNeedToGetMemes={setNeedToGetMemes} />
         </div>
       )
     }
     else if (second < upper) {
       return (
         <div className="saved-memes-row">
-          <Meme meme={memes[first]} key={memes[first].id} username={currUserName} setNeedToGetMemes={setNeedToGetMemes} />
-          <Meme meme={memes[second]} key={memes[second].id} username={currUserName} setNeedToGetMemes={setNeedToGetMemes} />
+          <Meme meme={memes[first]} key={memes[first].id} userID={currUserID} setNeedToGetMemes={setNeedToGetMemes} />
+          <Meme meme={memes[second]} key={memes[second].id} userID={currUserID} setNeedToGetMemes={setNeedToGetMemes} />
         </div>
       )
     }
     else if (first < upper) {
       return (
         <div className="saved-memes-row">
-          <Meme meme={memes[first]} key={memes[first].id} username={currUserName} setNeedToGetMemes={setNeedToGetMemes} />
+          <Meme meme={memes[first]} key={memes[first].id} userID={currUserID} setNeedToGetMemes={setNeedToGetMemes} />
         </div>
       )
     }

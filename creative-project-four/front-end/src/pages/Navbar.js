@@ -1,0 +1,28 @@
+import React from "react";
+import { Link } from "react-router-dom";
+
+class Navbar extends React.Component {
+    render() {
+        return (
+            <>
+                <nav className="navbar navbar-expand-sm bg-light">
+                    <div className="container-fluid">
+                        <ul className="navbar-nav">
+                            <li className="nav-item">
+                                <Link onClick={e => this.props.setGoPastHome(false)} to="/" className="nav-link" >Home</Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link to="/meme/random" className="nav-link" >Random Meme</Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link to="/meme/gallery" className="nav-link" >Meme Gallery</Link>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </>
+        );
+    }
+}
+
+export default Navbar;

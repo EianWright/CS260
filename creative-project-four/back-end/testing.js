@@ -16,15 +16,15 @@ test1();
 
 const test2 = async () => {
     try {
-        let response = await axios.get('http://localhost:3001/api/v4/user/sally');
+        /*let response = await axios.get('http://localhost:3001/api/v4/user/sally');
         console.log("Success");
-        console.log(response.data);
+        console.log(response.data);*/
 
-        let tryingMeme = await axios.get('http://localhost:3001/api/v4/meme/random');
+        /*let tryingMeme = await axios.get('http://localhost:3001/api/v4/meme/random');
         console.log("Worked again.");
-        console.log(tryingMeme.data);
+        console.log(tryingMeme.data);*/
 
-        let url = 'http://localhost:3001/api/v4/meme/saved/' + tryingMeme.data.id + '/' + response.data.user.id;
+        let url = 'http://localhost:3001/api/v4/meme/saved/' + '63717d6b30c36e1aef338265' + '/' + '6379522b01cfa430fa568612';
         console.log(url);
         let savedMeme = await axios.post(url);
         console.log("final worked");

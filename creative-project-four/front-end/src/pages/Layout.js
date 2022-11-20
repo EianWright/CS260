@@ -1,39 +1,33 @@
-import { Outlet, Link } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import { Navigate } from "react-router-dom";
 
 const Layout = (props) => {
 
-    const savedNavBar = <>
-        <nav className="navbar navbar-expand-sm bg-light">
-            <div className="container-fluid">
-                <ul className="navbar-nav">
-                    <li className="nav-item">
-                        <Link onClick={e => setGoPastHome(false)} to="/" className="nav-link" >Home</Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link to="/meme/random" className="nav-link" >Random Meme</Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link to="/meme/gallery" className="nav-link" >Meme Gallery</Link>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </>;
-
-    const [currUserName, setCurrUserName] = useState("");
+    const [currUser, setCurrUser] = useState({ id:"", name:"" });
+    const [lastMeme, setLastMeme] = useState({ id:"", url:""});
     const [goPastHome, setGoPastHome] = useState(false);
 
     useEffect(() => {
         if (goPastHome) {
             <Navigate to="/meme/random" />
         }
-    }, [goPastHome, currUserName]);
+    }, [goPastHome, currUser]);
+
+    function getProps() {
+        return {
+            goPastHome: goPastHome,
+            currUser: currUser,
+            lastMeme: lastMeme,
+            setLastMeme: setLastMeme,
+            setGoPastHome: setGoPastHome,
+            setCurrUser: setCurrUser
+        };
+    }
 
     return (
         <>
-            <Outlet context={[setGoPastHome, goPastHome, setCurrUserName, currUserName, savedNavBar]} />
+            <Outlet context={[getProps()]} />
         </>
     )
 };
