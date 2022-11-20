@@ -82,26 +82,30 @@ async function getUser(username) {
     return user;
 }
 
-async function getMeme(memeID) {
-    return new Promise(function (myResolve, myReject) {
-        Meme.findById(memeID).exec().then(
-            async function (value) {
-                try {
-                    let meme = value;
-                    newTimesViewed = meme.timesViewed + 1;
-                    let updatedMeme = await Meme.findByIdAndUpdate(value.id, { timesViewed: newTimesViewed })
-                    myResolve(updatedMeme);
+async function getMeme(memeID, updateViews) {
+    if (updateViews) {
+        return new Promise(function (myResolve, myReject) {
+            Meme.findById(memeID).exec().then(
+                async function (value) {
+                    try {
+                        let meme = value;
+                        newTimesViewed = meme.timesViewed + 1;
+                        let updatedMeme = await Meme.findByIdAndUpdate(value.id, { timesViewed: newTimesViewed })
+                        myResolve(updatedMeme);
+                    }
+                    catch (error) {
+                        myReject(error)
+                    }
+                },
+                function (error) {
+                    myReject(error);
                 }
-                catch (error) {
-                    myReject(error)
-                }
-            },
-            function (error) {
-                myReject(error);
-            }
-        );
-    });
-    
+            );
+        });
+    }
+    else {
+        return Meme.findById(memeID).exec();
+    }
 };
 
 function getQueryPromise(query, compareFunc) {
@@ -162,15 +166,14 @@ app.get('/api/v4/user/:username', async (req, res) => {
     }
 });
 
-app.post('/api/v4/meme/saved/:userid/:memeid', async (req, res) => {  //TODO: Add check that meme hasn't already been saved and throw error
-    try {  // TODO: Structure with promise instead await so that synchronous calls to the database can occur, causing less wait time.
+app.post('/api/v4/meme/saved/:userid/:memeid', async (req, res) => {
+    try {
         let userID = req.params.userid;
         let memeID = req.params.memeid;
         let checks = [getQueryPromise(User.findById(userID).exec(), checkIfNull), getQueryPromise(Meme.findById(memeID).exec(), checkIfNull)]
         let passed = await Promise.all(checks).then((values) => {
             return true;
         }).catch((error) => {
-            //console.error(error);
             return false;
         });
         if (!passed) {
