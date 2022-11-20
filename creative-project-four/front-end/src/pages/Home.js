@@ -5,6 +5,8 @@ import { useOutletContext, Navigate } from "react-router-dom";
 const Home = () => {
   const [props] = useOutletContext();
 
+  const previousUserName = props.currUser.name;
+
   const [formNameField, setFormNameField] = useState(() => {return props.currUser.name;});
 
   if (props.goPastHome) {
@@ -15,9 +17,12 @@ const Home = () => {
 
   const addUser = async (username) => {
     try {
-      let url = '/api/v4/user/' + username;
-      const response = await axios.post(url);
-      props.setCurrUser(response.data.user);
+      if (previousUserName !== username) {
+        let url = '/api/v4/user/' + username;
+        const response = await axios.post(url);
+        props.setCurrUser(response.data.user);
+        props.setLastMeme({ id: "", url: "" })
+      }
       props.setGoPastHome(true);
     } catch (error) {
       console.log(error);

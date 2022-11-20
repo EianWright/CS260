@@ -17,7 +17,7 @@ const MemesGalleryProxy = () => {
         return (
             <>
                 <Navbar setGoPastHome={props.setGoPastHome} />
-                <MemesGallery currUserID={currUser.id} />
+                <MemesGallery currUser={currUser} />
             </>
         )
     }

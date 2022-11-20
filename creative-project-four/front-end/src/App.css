@@ -46,6 +46,7 @@
 }
 
 .new-meme-container {
+  margin-top: 10px;
   width: 40%;
 }
 
@@ -76,10 +77,22 @@
   height: auto;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: flex-end;
+  align-items: center;
   padding: 15px;
   padding-left: 25px;
   padding-right: 25px;
+}
+
+.button-text-container > p {
+  margin: 0px;
+}
+
+.button-text-container {
+  display: flex;
+  flex-direction: row;
+  width: 90%;
+  margin-top: 5px;
+  justify-content: space-between;
 }
 
 .remove-meme-button {

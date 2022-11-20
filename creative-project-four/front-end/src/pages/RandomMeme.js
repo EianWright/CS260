@@ -30,7 +30,7 @@ const RandomMemePage = (props) => {
             let url = '/api/v4/meme/saved/' + currUserID + '/' + meme.id;
             const response = await axios.post(url, meme);
             if (response.status === 204) {
-                setMessage({ messageType: 1, messageText: "Meme has already been saved!" });
+                setMessage({ messageType: 1, messageText: "Meme has already been saved to your gallery!" });
             }
             else {
                 setMessage({ messageType: 2, messageText: "Meme successfully saved!" });
@@ -62,6 +62,19 @@ const RandomMemePage = (props) => {
         }
     }, [getMeme]);
 
+    const getWelcomeMessage = () => {
+        if (props.lastMeme.url === "" || props.lastMeme.url === undefined || props.lastMeme.url === null) {
+            return(
+                <p>Welcome {props.currUser.name}. This uses the <a href="https://humorapi.com/docs/#Random-Meme">Humor Api's random meme endpoint</a> to get a random meme. Click "New Meme" to get started.</p>
+            );
+        }
+        else {
+            return(
+                <></>
+            );
+        }
+    }
+
     const getSaveButton = () => {
         if (meme.url === "" || meme.url === undefined || meme.url === null) {
             return (
@@ -79,14 +92,14 @@ const RandomMemePage = (props) => {
 
     return (
         <>
-            <p>Welcome {props.currUser.name}. This uses the <a href="https://humorapi.com/docs/#Random-Meme">Humor Api's random meme endpoint</a> to get a random meme. Click "New Meme" to get started.</p>
-            <MessageDisplay message={message} />
+            {getWelcomeMessage()}
             <div>
                 <button className='meme-button' onClick={() => {
                     setGetMeme(true);
                 }}>New Meme</button>
                 {getSaveButton()}
             </div>
+            <MessageDisplay message={message} />
             <div className="new-meme-container">
                 <Meme key={meme.id} meme={meme} setMeme={setMeme} />
             </div>

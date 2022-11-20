@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Meme from "./Meme";
 
 const SelectedMemesPage = (props) => {
-  const currUserID = props.currUserID;
+  const currUserID = props.currUser.id;
   const [memes, setMemes] = useState([]);
   const [needToGetMemes, setNeedToGetMemes] = useState(true);
 
@@ -27,8 +27,19 @@ const SelectedMemesPage = (props) => {
     let first = lower;
     let second = lower + 1;
     let third = lower + 2;
+    let fourth = lower + 3;
 
-    if (third < upper) {
+    if (fourth < upper) {
+      return (
+        <div className="saved-memes-row">
+          <Meme meme={memes[first]} key={memes[first].id} userID={currUserID} setNeedToGetMemes={setNeedToGetMemes} />
+          <Meme meme={memes[second]} key={memes[second].id} userID={currUserID} setNeedToGetMemes={setNeedToGetMemes} />
+          <Meme meme={memes[third]} key={memes[third].id} userID={currUserID} setNeedToGetMemes={setNeedToGetMemes} />
+          <Meme meme={memes[fourth]} key={memes[fourth].id} userID={currUserID} setNeedToGetMemes={setNeedToGetMemes} />
+        </div>
+      )
+    }
+    else if (third < upper) {
       return (
         <div className="saved-memes-row">
           <Meme meme={memes[first]} key={memes[first].id} userID={currUserID} setNeedToGetMemes={setNeedToGetMemes} />
@@ -61,13 +72,13 @@ const SelectedMemesPage = (props) => {
     let length = memes.length;
     if (memes.length === 0) {
       return (
-        <h5>No memes saved yet. Generate some random memes and save some to have them show up here.</h5>
+        <h5>Hey, {props.currUser.name}. It looks like you haven't saved any memes yet. As you generate random memes and save them, they will show up here.</h5>
       )
     }
     else {
       let rows = [];
-      for (let i = 0; i < length; i += 3) {
-        let upper = i + 3;
+      for (let i = 0; i < length; i += 4) {
+        let upper = i + 4;
         if (upper > length) {
           upper = length;
         }
@@ -81,7 +92,8 @@ const SelectedMemesPage = (props) => {
 
   return (
     <>
-      <h2>Saved Memes</h2>
+      <h2>My Memes</h2>
+      <h6>{props.currUser.name}</h6>
       <div>
         {createMemeComponents(memes)}
       </div>

@@ -14,7 +14,7 @@ function App() {
           <Route path="/" element={<Layout />} >
             <Route index element={<Home />} />
             <Route path="meme/random" element={<RandomMemeProxy />} />
-            <Route path='meme/gallery' element={<MemesGalleryProxy />} />
+            <Route path='meme/mine' element={<MemesGalleryProxy />} />
             <Route path='meme/*' element={<Navigate to="random" />} />
           </Route>
           <Route path="*" element={<Navigate to="/" />} />

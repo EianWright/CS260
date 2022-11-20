@@ -20,6 +20,16 @@ function Meme(props) {
         }
     }
 
+    function getTimesViewed() {
+        let timesViewed = meme.timesViewed;
+        if (timesViewed === 1) {
+            return timesViewed + " view";
+        }
+        else {
+            return timesViewed + " views"
+        }
+    }
+
     if (meme.url === "" || meme.url === undefined || meme.url === null) {
         return (
             <></>
@@ -29,8 +39,10 @@ function Meme(props) {
         return (
             <div className="meme-with-button">
                 <img alt="Random meme" src={meme.url} className="meme-image" />
-                <p>{meme.timesViewed}</p>
-                <button onClick={e => deleteMeme(currUserID, meme.id, setNeedToGetMemes)} className="remove-meme-button">Remove</button>
+                <div className="button-text-container">
+                    <p>{getTimesViewed()}</p>
+                    <button onClick={e => deleteMeme(currUserID, meme.id, setNeedToGetMemes)} className="remove-meme-button">Remove</button>
+                </div>
             </div>
         );
     }

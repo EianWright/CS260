@@ -15,7 +15,7 @@ class Navbar extends React.Component {
                                 <Link to="/meme/random" className="nav-link" >Random Meme</Link>
                             </li>
                             <li className="nav-item">
-                                <Link to="/meme/gallery" className="nav-link" >Meme Gallery</Link>
+                                <Link to="/meme/mine" className="nav-link" >My Memes</Link>
                             </li>
                         </ul>
                     </div>
