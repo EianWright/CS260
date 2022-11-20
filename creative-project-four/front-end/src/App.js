@@ -9,7 +9,7 @@ function App() {
   return (
     <div className="App">
       <h1>Creative Project 4</h1>
-      <BrowserRouter basename='/CS260/creative-project-three/front-end/build'>
+      <BrowserRouter basename='/CS260/creative-project-four/front-end/build'>
         <Routes>
           <Route path="/" element={<Layout />} >
             <Route index element={<Home />} />
