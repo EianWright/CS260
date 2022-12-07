@@ -9,7 +9,6 @@ function Meme(props) {
     const deleteMeme = async (userID, memeID, setNeedToGetMemes) => {
         try {
             let url = '/api/v4/meme/saved/' + userID + '/' + memeID;
-            console.log(url);
             const response = await axios.delete(url);
             if (response.status !== 404) {
                 setNeedToGetMemes(true);
