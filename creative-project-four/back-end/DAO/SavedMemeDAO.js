@@ -1,0 +1,51 @@
+class SavedMemeDAO {
+    constructor(mongoose) {
+
+        const savedMemeSchema = new mongoose.Schema({
+            memeID: String,
+            savedByUser: {
+                type: String,
+                required: true,
+                index: true
+            },
+            savedTime: Date,
+        });
+
+        savedMemeSchema.index({ memeID: 1, savedByUser: 1 }, { unique: true });
+
+        savedMemeSchema.set('toJSON', {
+            virtuals: true
+        });
+
+        this.SavedMeme = mongoose.model('SavedMeme', savedMemeSchema);
+    }
+
+    async getSavedMemeByIDs(memeID, userID) {
+        let query = this.SavedMeme.where({ memeID: memeID, savedByUser: userID });
+        return await query.findOne();
+    }
+
+    async deleteSavedMemeByIDs(memeID, userID) {
+        const query = this.SavedMeme.where({ memeID: memeID, savedByUser: userID });
+        return await query.findOneAndDelete();
+    }
+
+    async saveSavedMeme(memeID, userID) {
+        const savedMeme = new this.SavedMeme({
+            memeID: memeID,
+            savedByUser: userID,
+            savedTime: Date.now()
+        });
+        await savedMeme.save();
+        return savedMeme;
+    }
+
+    async getSavedMemesByUserID(userID, sortOrder) {
+        const query = this.SavedMeme.where({ savedByUser: userID })
+            .sort({ savedTime: sortOrder });
+        return await query.find();
+    }
+
+}
+
+module.exports = SavedMemeDAO;
