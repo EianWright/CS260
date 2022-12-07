@@ -1,12 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+
 const UserDAO = require('./DAO/userDAO');
+const MemeDAO = require('./DAO/memeDAO');
+const SavedMemeDAO = require('./DAO/SavedMemeDAO');
+
 const UserServer = require('./Server/userServer');
 const MemeServer = require('./Server/memeServer');
 const SavedMemeServer = require('./Server/savedMemeServer');
-const MemeDAO = require('./DAO/memeDAO');
-const SavedMemeDAO = require('./DAO/SavedMemeDAO');
 
 const app = express();
 app.use(bodyParser.urlencoded({
