@@ -1,6 +1,6 @@
 import axios from 'axios';
-import Meme from './Meme';
-import MessageDisplay from './MessageDisplay';
+import Meme from '../Shared/Meme';
+import MessageDisplay from '../Shared/MessageDisplay';
 import { useState, useEffect, useRef } from 'react';
 
 

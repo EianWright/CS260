@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Meme from "./Meme";
+import Meme from "../Shared/Meme";
 
 const SelectedMemesPage = (props) => {
   const currUserID = props.currUser.id;

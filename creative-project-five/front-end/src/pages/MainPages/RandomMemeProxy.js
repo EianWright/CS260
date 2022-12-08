@@ -1,6 +1,6 @@
 import { useOutletContext, Navigate } from "react-router-dom";
 import RandomMemePage from './RandomMeme'
-import Navbar from './Navbar';
+import MainNavbar from "./Navigation/MainNavbar";
 
 
 const RandomMemePageProxy = () => {
@@ -16,7 +16,7 @@ const RandomMemePageProxy = () => {
     else {
         return (
             <>
-                <Navbar setGoPastHome={props.setGoPastHome} />
+                <MainNavbar setGoPastHome={props.setGoPastHome} />
                 <RandomMemePage currUser={currUser} lastMeme={props.lastMeme} setLastMeme={props.setLastMeme} />
             </>
         )
