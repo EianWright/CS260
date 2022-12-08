@@ -17,6 +17,9 @@ class MainNavbar extends React.Component {
                             <li className="nav-item">
                                 <Link to="/meme/mine" className="nav-link" >My Memes</Link>
                             </li>
+                            <li className="nav-item">
+                                <Link to="/explore" className="nav-link" >Explore</Link>
+                            </li>
                         </ul>
                     </div>
                 </nav>

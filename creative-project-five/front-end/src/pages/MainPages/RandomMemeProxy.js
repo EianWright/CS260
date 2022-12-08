@@ -2,7 +2,6 @@ import { useOutletContext, Navigate } from "react-router-dom";
 import RandomMemePage from './RandomMeme'
 import MainNavbar from "./Navigation/MainNavbar";
 
-
 const RandomMemePageProxy = () => {
     const [props] = useOutletContext();
     

@@ -1,35 +1,27 @@
-import { Outlet } from "react-router-dom";
-import { useState, useEffect } from 'react';
+import { useOutletContext, Outlet } from "react-router-dom";
 import { Navigate } from "react-router-dom";
+import ExploreNavbar from "./ExploreNavbar";
+import MainNavbar from "../../MainPages/Navigation/MainNavbar"
 
-const ExploreLayout = (props) => {
+const ExploreLayout = () => {
+    const [props] = useOutletContext();
 
-    const [currUser, setCurrUser] = useState({ id:"", name:"" });
-    const [lastMeme, setLastMeme] = useState({ id:"", url:""});
-    const [goPastHome, setGoPastHome] = useState(false);
-
-    useEffect(() => {
-        if (goPastHome) {
-            <Navigate to="/meme/random" />
-        }
-    }, [goPastHome, currUser]);
-
-    function getProps() {
-        return {
-            goPastHome: goPastHome,
-            currUser: currUser,
-            lastMeme: lastMeme,
-            setLastMeme: setLastMeme,
-            setGoPastHome: setGoPastHome,
-            setCurrUser: setCurrUser
-        };
+    const currUser = props.currUser;
+    if (currUser === null || currUser === undefined || currUser === "" || currUser.id === null ||
+        currUser.id === undefined || currUser.id === "" || props.goPastHome !== true) {
+        return (
+            <Navigate to="/" />
+        );
     }
-
-    return (
-        <>
-            <Outlet context={[getProps()]} />
-        </>
-    )
+    else {
+        return (
+            <>
+                <MainNavbar setGoPastHome={props.setGoPastHome} />
+                <ExploreNavbar />
+                <Outlet context={[props]} />
+            </>
+        )
+    }
 };
 
 export default ExploreLayout

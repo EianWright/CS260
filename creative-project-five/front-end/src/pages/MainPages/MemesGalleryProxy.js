@@ -2,7 +2,6 @@ import { useOutletContext, Navigate } from "react-router-dom";
 import MemesGallery from './MemesGallery';
 import MainNavbar from "./Navigation/MainNavbar";
 
-
 const MemesGalleryProxy = () => {
     const [props] = useOutletContext();
 
