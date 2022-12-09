@@ -29,16 +29,12 @@ const test2 = async () => {
         let response = await axios.get('http://localhost:3001/api/v4/user/John');
         let user = response.data.user;
 
-        let url = 'http://localhost:3001/api/v4/meme/saved/' + user.id + '/5/NEWEST/NONE';
+        let url = 'http://localhost:3001/api/v4/meme/saved/' + user.id + '/6/NEWEST/NONE';
         let savedMeme = await axios.get(url);
-        let memes = savedMeme.data;
+        let memes = savedMeme.data.memes;
+        let hasMore = savedMeme.data.hasMore;
         console.log(memes);
-        console.log('\n\n');
-
-        url = 'http://localhost:3001/api/v4/meme/saved/' + user.id + '/5/OLDEST/NONE';
-        savedMeme = await axios.get(url);
-        memes = savedMeme.data;
-        console.log(memes);
+        console.log(hasMore);
         console.log('\n\n');
 
         /*

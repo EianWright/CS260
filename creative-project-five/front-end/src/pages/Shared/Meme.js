@@ -11,7 +11,7 @@ function Meme(props) {
             let url = '/api/v4/meme/saved/' + userID + '/' + memeID;
             const response = await axios.delete(url);
             if (response.status !== 404) {
-                setNeedToGetMemes(true);
+                setNeedToGetMemes(meme);
             }
         } catch (error) {
             // TODO: PUT IN AN ERROR COMPONENT

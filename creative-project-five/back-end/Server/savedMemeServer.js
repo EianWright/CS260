@@ -34,7 +34,7 @@ class SavedMemeServer {
 
         app.get('/api/v4/meme/saved/:userid/:numbermemes/:sortorder/:lastmemeid', async (req, res) => {
             try {
-                let numberOfMemesToRetrieve = req.params.numbermemes;
+                let numberOfMemesToRetrieve = parseInt(req.params.numbermemes) + 1;
                 let userID = req.params.userid;
                 let lastSavedTime = req.params.lastmemeid;
                 if (lastSavedTime !== "NONE") {
@@ -49,8 +49,12 @@ class SavedMemeServer {
                 if (savedMemes === null) {
                     res.sendStatus(204);
                 }
+                let hasMore = (savedMemes.length == numberOfMemesToRetrieve);
+                if (hasMore) {
+                    savedMemes = savedMemes.slice(0, -1);
+                }
                 let memes = await this.memeDAO.getMultipleMemes(savedMemes);
-                res.send(memes);
+                res.send({ memes: memes, hasMore: hasMore });
             }
             catch (error) {
                 console.log(error);
