@@ -75,6 +75,10 @@ class MemeDAO {
         return this.Meme.findById(memeID).exec();
     }
 
+    async getMemeByID(memeID) {
+        return await this.getMemeWithPromiseByID(memeID);
+    }
+
     async getRandomMeme() {
         try {
             let url = appendAPIKEY("https://api.humorapi.com/memes/random?media-type=image&api-key=");

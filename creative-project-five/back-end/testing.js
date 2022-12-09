@@ -24,11 +24,42 @@ const test2 = async () => {
         console.log("Worked again.");
         console.log(tryingMeme.data);*/
 
-        let url = 'http://localhost:3001/api/v4/meme/saved/' + '63717d6b30c36e1aef338265' + '/' + '6379522b01cfa430fa568612';
-        console.log(url);
-        let savedMeme = await axios.post(url);
-        console.log("final worked");
+        ///api/v4/meme/saved/:userid/:numbermemes/:sortorder/:firstmemeid
+
+        let response = await axios.get('http://localhost:3001/api/v4/user/John');
+        let user = response.data.user;
+
+        let url = 'http://localhost:3001/api/v4/meme/saved/' + user.id + '/5/NEWEST/NONE';
+        let savedMeme = await axios.get(url);
+        let memes = savedMeme.data;
+        console.log(memes);
+        console.log('\n\n');
+
+        url = 'http://localhost:3001/api/v4/meme/saved/' + user.id + '/5/OLDEST/NONE';
+        savedMeme = await axios.get(url);
+        memes = savedMeme.data;
+        console.log(memes);
+        console.log('\n\n');
+
+        /*
+        url = 'http://localhost:3001/api/v4/meme/saved/' + user.id + '/2/NEWEST/NONE';
+        savedMeme = await axios.get(url);
+        memes = savedMeme.data;
+        console.log(memes);
+        console.log('\n\n');
+        url = 'http://localhost:3001/api/v4/meme/saved/' + user.id + '/2/NEWEST/' + memes[(memes.length - 1)].id;
+        savedMeme = await axios.get(url);
         console.log(savedMeme.data);
+        console.log('\n\n');
+        memes = savedMeme.data;
+        url = 'http://localhost:3001/api/v4/meme/saved/' + user.id + '/2/NEWEST/' + memes[(memes.length - 1)].id;
+        savedMeme = await axios.get(url);
+        console.log(savedMeme.data);
+        memes = savedMeme.data;
+        url = 'http://localhost:3001/api/v4/meme/saved/' + user.id + '/2/NEWEST/' + memes[(memes.length - 1)].id;
+        savedMeme = await axios.get(url);
+        console.log(savedMeme.data);
+        //console.log(savedMeme.data);*/
         
     }
     catch(err) {

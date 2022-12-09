@@ -32,9 +32,20 @@ class SavedMemeServer {
             }
         });
 
-        app.get('/api/v4/meme/saved/:userid', async (req, res) => {
+        app.get('/api/v4/meme/saved/:userid/:numbermemes/:sortorder/:lastmemeid', async (req, res) => {
             try {
-                let savedMemes = await this.savedMemeDAO.getSavedMemesByUserID(req.params.userid, -1);
+                let numberOfMemesToRetrieve = req.params.numbermemes;
+                let userID = req.params.userid;
+                let lastSavedTime = req.params.lastmemeid;
+                if (lastSavedTime !== "NONE") {
+                    let lastSavedMeme = await this.savedMemeDAO.getSavedMemeByIDs(lastSavedTime, userID);
+                    console.log(lastSavedMeme);
+                    if (lastSavedMeme !== null) {
+                        lastSavedTime = lastSavedMeme.savedTime;
+                    }
+                }
+                let sortOrder = req.params.sortorder;
+                let savedMemes = await this.savedMemeDAO.getSavedMemesByUserID(userID, sortOrder, numberOfMemesToRetrieve, lastSavedTime);
                 if (savedMemes === null) {
                     res.sendStatus(204);
                 }
