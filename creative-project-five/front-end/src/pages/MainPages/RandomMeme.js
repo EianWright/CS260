@@ -65,7 +65,7 @@ const RandomMemePage = (props) => {
     const getWelcomeMessage = () => {
         if (props.lastMeme.url === "" || props.lastMeme.url === undefined || props.lastMeme.url === null) {
             return(
-                <p>Welcome {props.currUser.name}. This uses the <a href="https://humorapi.com/docs/#Random-Meme">Humor Api's random meme endpoint</a> to get a random meme. Click "New Meme" to get started.</p>
+                <p>Welcome {props.currUser.name}. This uses the <a target='_blank' href="https://humorapi.com/docs/#Random-Meme">Humor Api's random meme endpoint</a> to get a random meme. Click "New Meme" to get started.</p>
             );
         }
         else {

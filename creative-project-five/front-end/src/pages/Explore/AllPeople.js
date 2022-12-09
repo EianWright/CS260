@@ -1,13 +1,13 @@
 import { useOutletContext } from "react-router-dom";
 
-const AllMemes = () => {
+const AllPeople = () => {
   const [props] = useOutletContext();
 
   return (
     <>
-      <h2>All Memes</h2>
+      <h2>All People</h2>
     </>
   )
 }
 
-export default AllMemes;
+export default AllPeople;

@@ -7,7 +7,7 @@ function App() {
       <h1>Creative Project 5</h1>
       <MyRouter />
       <footer className='repo-footer'>
-        <a href='https://github.com/EianWright/CS260/tree/main/creative-project-five'>Creative Project Five GitHub Repo</a>
+        <a target="_blank" href='https://github.com/EianWright/CS260/tree/main/creative-project-five'>Creative Project Five GitHub Repo</a>
       </footer>
     </div>
   );

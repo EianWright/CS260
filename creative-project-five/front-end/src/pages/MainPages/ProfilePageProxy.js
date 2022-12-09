@@ -1,8 +1,8 @@
 import { useOutletContext, Navigate } from "react-router-dom";
-import MemesGallery from './MemesGallery';
+import ProfilePage from './ProfilePage';
 import MainNavbar from "./Navigation/MainNavbar";
 
-const MemesGalleryProxy = () => {
+const ProfilePageProxy = () => {
     const [props] = useOutletContext();
 
     const currUser = props.currUser;
@@ -16,10 +16,10 @@ const MemesGalleryProxy = () => {
         return (
             <>
                 <MainNavbar setGoPastHome={props.setGoPastHome} />
-                <MemesGallery currUser={currUser} />
+                <ProfilePage currUser={currUser} />
             </>
         )
     }
 }
 
-export default MemesGalleryProxy;
+export default ProfilePageProxy
