@@ -39,7 +39,6 @@ class SavedMemeServer {
                 let lastSavedTime = req.params.lastmemeid;
                 if (lastSavedTime !== "NONE") {
                     let lastSavedMeme = await this.savedMemeDAO.getSavedMemeByIDs(lastSavedTime, userID);
-                    console.log(lastSavedMeme);
                     if (lastSavedMeme !== null) {
                         lastSavedTime = lastSavedMeme.savedTime;
                     }
